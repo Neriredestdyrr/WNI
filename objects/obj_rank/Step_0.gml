@@ -8,6 +8,7 @@ switch (state)
 			room_goto(rank_room)
 			
 			obj_player.spawn = "a"
+			obj_player.visible = false
 			x = obj_player.x - obj_camera.campos.x
 			y = obj_player.y - obj_camera.campos.y
 			
@@ -16,31 +17,11 @@ switch (state)
 			alarm[0] = 220
 			alarm[2] = 630
 			
-			var ranks = [
-				global.rank_milestones.c,
-				global.rank_milestones.b,
-				global.rank_milestones.a,
-				global.rank_milestones.s
-			]
-			
-			if (rank_score >= global.rank_milestones.s && check_p_rank())
-				rank_ix = 5
-			else
-			{
-				for (var i = 4; i >= 1; i--) 
-				{
-					if global.score >= ranks[i - 1]
-					{
-						rank_ix = i
-						break;
-					}
-				}
-			} //can be made redundant and removed as obj_exitgate calculates the rank
 			scr_sound(rank_data[rank_ix].song)
 		}
 		break;
 	case 1:
-		obj_player.sprite_index = spr_player_idle
+		obj_player.sprite_index = obj_player.spr_player_idle
 		var tx = screen_w / 2
 		var ty = screen_h / 2
 		var dir = point_direction(x, y, tx, ty)

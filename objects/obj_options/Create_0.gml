@@ -9,7 +9,7 @@ ui_input =
 	deny: new Input(global.keybinds.ui_deny)
 };
 
-depth = -2000
+depth = -100
 
 optionselected = 0
 inputbuffer = 0
@@ -153,6 +153,10 @@ list_arr = [
 			}),
 		new add_option("SPEEDRUN TIMER", types.onoff, global.option_timerspeedrun,
 			function(_val) {
+				if _val
+					instance_activate_object(obj_timer)
+				else
+					instance_deactivate_object(obj_timer)
 				global.option_timerspeedrun = _val
 				quick_ini_write_real("globalsave.ini", "options", "timerspeedrun", _val)
 			})
@@ -186,5 +190,4 @@ cur_list = list_arr[list_ix]
 
 snd_frogscream = noone
 
-scr_sound(choose(sfx_ui_accept1, sfx_ui_accept2, sfx_ui_accept3))
 //i could reduce the amount of new functions made here actually,,,, maybe tdp was right to have seperate functions for each type

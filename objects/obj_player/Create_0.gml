@@ -1,6 +1,12 @@
 // player related macros
 #macro p_move (-input.left.check + input.right.check)
 
+enum characters
+{
+	peppino,
+	noise
+}
+
 // initialize input
 input =
 {
@@ -18,6 +24,50 @@ input =
 
 collide_init()
 
+#region Player States
+
+player_states = [];
+
+player_states[states.taunt] = player_taunt;
+player_states[states.normal] = player_normal;
+player_states[states.jump] = player_jump;
+player_states[states.mach2] = player_mach2;
+player_states[states.mach3] = player_mach3;
+player_states[states.tumble] = player_tumble;
+player_states[states.slide] = player_slide;
+player_states[states.climbwall] = player_climbwall;
+player_states[states.bump] = player_bump;
+player_states[states.groundpound] = player_groundpound;
+player_states[states.grab] = player_grab;
+player_states[states.superjump] = player_superjump;
+player_states[states.crouch] = player_crouch;
+player_states[states.actor] = player_actor;
+player_states[states.ladder] = player_ladder;
+player_states[states.punch] = player_punch;
+player_states[states.hold] = player_hold;
+player_states[states.punchenemy] = player_punchenemy;
+player_states[states.piledriver] = player_piledriver;
+player_states[states.swingding] = player_swingding;
+player_states[states.grind] = player_grind;
+player_states[states.hurt] = player_hurt;
+player_states[states.parry] = player_parry;
+player_states[states.backtohub] = player_backtohub;
+player_states[states.noclip] = player_noclip;
+player_states[states.defeat] = player_defeat;
+player_states[states.punchstun] = player_punchstun;
+player_states[states.fireass] = player_fireass;
+player_states[states.shotgunshoot] = player_shotgunshoot;
+player_states[states.ball] = player_ball;
+player_states[states.slip] = player_slip;
+player_states[states.divebomb] = player_divebomb;
+player_states[states.wallbounce] = player_wallbounce;
+
+#endregion
+
+sprite_player_reset("N")
+
+character = characters.noise
+
 spawn = "a"
 door_type = fade_types.none
 wasclimbingwall = false
@@ -30,6 +80,7 @@ xscale = 1
 jumpstop = false
 mach4mode = false
 wallspeed = 0
+wallbouncedampen = 0
 flash = 0
 
 aftimg_timers = {
@@ -74,16 +125,16 @@ make_loop_sound = function(_state, _sound, _func = noone, _looppoints = noone, _
 }
 
 loop_sounds = {
-	mach1: new make_loop_sound(states.mach2, sfx_mach1, function() { return obj_player.sprite_index == spr_player_mach1;}),
-	mach2: new make_loop_sound(states.mach2, sfx_mach2, function() { return obj_player.sprite_index == spr_player_mach2;}),
-	mach3: new make_loop_sound(states.mach3, sfx_mach3, function() { return obj_player.sprite_index != spr_player_crazyrun;}),
-	mach4: new make_loop_sound(states.mach3, sfx_mach4, function() { return obj_player.sprite_index == spr_player_crazyrun;}),
+	mach1: new make_loop_sound(states.mach2, sfx_mach1, function() { return obj_player.sprite_index == obj_player.spr_player_mach1;}),
+	mach2: new make_loop_sound(states.mach2, sfx_mach2, function() { return obj_player.sprite_index == obj_player.spr_player_mach2;}),
+	mach3: new make_loop_sound(states.mach3, sfx_mach3, function() { return obj_player.sprite_index != obj_player.spr_player_crazyrun;}),
+	mach4: new make_loop_sound(states.mach3, sfx_mach4, function() { return obj_player.sprite_index == obj_player.spr_player_crazyrun;}),
 	climbwall: new make_loop_sound(states.climbwall, sfx_mach2),
 	groundpound: new make_loop_sound(states.groundpound, sfx_groundpoundloop),
-	piledriver: new make_loop_sound(states.piledriver, sfx_groundpoundloop, function() { return obj_player.sprite_index != spr_player_piledriverland}),
-	superjumphold: new make_loop_sound(states.superjump, sfx_superjumphold, function() { return obj_player.sprite_index != spr_player_superjump && obj_player.sprite_index != spr_player_Sjumpcancelstart && obj_player.sprite_index != spr_player_presentboxspring}, 
+	piledriver: new make_loop_sound(states.piledriver, sfx_groundpoundloop, function() { return obj_player.sprite_index != obj_player.spr_player_piledriverland}),
+	superjumphold: new make_loop_sound(states.superjump, sfx_superjumphold, function() { return obj_player.sprite_index != obj_player.spr_player_superjump && obj_player.sprite_index != obj_player.spr_player_Sjumpcancelstart && obj_player.sprite_index != obj_player.spr_player_presentboxspring}, 
 		[0.64, 1.84]),
-	ball: new make_loop_sound(states.ball, sfx_ballroll, function() { return obj_player.sprite_index != spr_player_ballend}),
+	ball: new make_loop_sound(states.ball, sfx_ballroll, function() { return obj_player.sprite_index != obj_player.spr_player_ballend}),
 }
 
 visual_size = 1
@@ -94,12 +145,13 @@ instakill = false
 taunttimer = 0
 i_frames = 0
 particle_timer = 0
+particle_timer2 = 0
 flamecloud_buffer = 0
 haskey = false
 hasgerome = false
 fallingtimer = 0
 
-depth = -100
+depth = -75
 
 pal_select = 1
 pattern_spr = pat_pizza

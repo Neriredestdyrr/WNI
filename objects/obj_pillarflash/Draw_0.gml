@@ -8,4 +8,10 @@ if pillar_id != -4
 		draw_self()
 }
 
+with obj_player
+{
+	if visible
+		event_perform(ev_draw, ev_draw_normal)
+}
+
 draw_set_alpha(1)

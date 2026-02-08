@@ -1,6 +1,7 @@
 mag = 0
 mag_decel = 0.5
 cam_charge = 0
+cam_y_offset = 0
 info_visible = false
 
 campos = {
@@ -10,4 +11,4 @@ campos = {
 
 //version = "DEBLOATED";
 
-depth = -150
+depth = -10000

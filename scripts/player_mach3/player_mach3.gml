@@ -105,13 +105,22 @@ function player_mach3()
 	
 	if ((!grounded || scr_slope(x, y + 1)) && scr_hitwall(x + xscale, y))
 	{
+		if character == characters.peppino
 		{
 			wallspeed = movespeed
-			if (movespeed < 1)
+			if movespeed < 1
 				wallspeed = 1
 			else
 				movespeed = wallspeed
 			state = states.climbwall
+		}
+		else if character == characters.noise && !scr_goupwall()
+		{
+			movespeed = 0
+			vsp = -17 + wallbouncedampen
+			wallbouncedampen += 2.55
+			sprite_index = spr_playerN_wallbounce
+			state = states.wallbounce
 		}
 	}
 	else if grounded && scr_hitwall(x + xscale, y) && !place_meeting(x + xscale, y, obj_metalblock)

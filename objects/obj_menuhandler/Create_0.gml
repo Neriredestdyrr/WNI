@@ -1,9 +1,23 @@
 // declare input
+special_keybind_deny = variable_clone(global.keybinds.ui_deny) //special conflicting input removal
+
+if is_array(special_keybind_deny)
+{
+	var _d_ix = array_get_index(special_keybind_deny, ord("X"))
+
+	if _d_ix != -1
+		array_delete(special_keybind_deny, _d_ix, 1)
+}
+
+show_debug_message(special_keybind_deny)
+
 input =
 {
 	left: new Input(global.keybinds.ui_left),
 	right: new Input(global.keybinds.ui_right),
-	accept: new Input(global.keybinds.ui_accept)
+	grab: new Input(global.keybinds.grab),
+	accept: new Input(global.keybinds.ui_accept),
+	deny: new Input(special_keybind_deny)
 };
 
 tvs =  [new ini_menu_tv_inst(103, 0, 
@@ -42,7 +56,8 @@ static_snd = scr_sound(sfx_menustatic, true)
 audio_sound_gain(static_snd, 0, 0)
 
 mu = scr_sound(mu_mainmenu, true)
-audio_sound_loop_end(mu, 4.76)
+audio_sound_loop_start(mu, 0.1)
+audio_sound_loop_end(mu, 4.9)
 
 cur_selected = 1
 state = 0

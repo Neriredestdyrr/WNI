@@ -1,10 +1,5 @@
-if room == mainmenu
+if room == mainmenu || room == rank_room ||  room == rm_timesup || instance_exists(obj_technicaldifficulty) || (instance_exists(obj_shell) && obj_shell.isOpen)
 	exit;
-else if instance_exists(obj_shell)
-{
-	if obj_shell.isOpen
-		exit;
-}
 
 if instance_exists(obj_options)
 {
