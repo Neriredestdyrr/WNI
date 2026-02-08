@@ -37,7 +37,7 @@
   ],
   "name":"spr_playerN_rageidle",
   "nineSlice":null,
-  "origin":9,
+  "origin":4,
   "parent":{
     "name":"Noise",
     "path":"folders/Sprites/Player/Noise.yy",
@@ -132,7 +132,7 @@
     "visibleRange":null,
     "volume":1.0,
     "xorigin":67,
-    "yorigin":59,
+    "yorigin":54,
   },
   "swatchColours":null,
   "swfPrecision":0.5,

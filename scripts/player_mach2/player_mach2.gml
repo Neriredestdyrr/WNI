@@ -58,7 +58,8 @@ function player_mach2()
 			sprite_index != spr_player_walljumpstart && 
 			sprite_index != spr_player_walljumpend && 
 			sprite_index != spr_player_longjump &&
-			sprite_index != spr_player_mach2jump)
+			sprite_index != spr_player_mach2jump &&
+			sprite_index != spr_playerN_spincancel)
 			reset_anim(spr_player_secondjump)
 		if (!jumpstop && !input.jump.check && vsp < 0)
 		{
@@ -80,7 +81,7 @@ function player_mach2()
 	if (input.down.check)
 	{
 		state = states.tumble
-		if (grounded)
+		if grounded
 			reset_anim(spr_player_machroll)
 		else
 		{
@@ -91,12 +92,23 @@ function player_mach2()
 	}
 	if ((!grounded || scr_slope(x, y + 1)) && scr_hitwall(x + xscale, y))
 	{
-		wallspeed = movespeed
-		if (movespeed < 1)
-			wallspeed = 1
-		else
-			movespeed = wallspeed
-		state = states.climbwall
+		if character == characters.peppino
+		{
+			wallspeed = movespeed
+			if (movespeed < 1)
+				wallspeed = 1
+			else
+				movespeed = wallspeed
+			state = states.climbwall
+		}
+		else if character == characters.noise && !scr_goupwall()
+		{
+			movespeed = 0
+			vsp = -17 + wallbouncedampen
+			wallbouncedampen += 2.55
+			sprite_index = spr_playerN_wallbounce
+			state = states.wallbounce
+		}
 	}
 	else if (grounded && scr_hitwall(x + xscale, y))
 	{
@@ -126,6 +138,10 @@ function player_mach2()
 		case spr_player_longjump:
 			image_speed = 0.4
 			if (anim_ended())
+				image_index = 10
+			break;
+		case spr_playerN_spincancel:
+			if anim_ended()
 				image_index = 10
 			break;
 	}

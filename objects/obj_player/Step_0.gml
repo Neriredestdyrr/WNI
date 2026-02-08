@@ -36,7 +36,10 @@ struct_foreach(aftimg_timers, function(_name, _data)
 
 
 if grounded
+{
 	coyote_time = 10
+	wallbouncedampen = 0
+}
 else if vsp < 0
 	coyote_time = 0
 

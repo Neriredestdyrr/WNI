@@ -2,11 +2,22 @@ function player_tumble() //ball is in its own state, player_ball()
 {
 	hsp = xscale * movespeed
 	
-	if !grounded && sprite_index != spr_player_dive
+	if !grounded 
 	{
-		vsp = 10
-		sprite_index = spr_player_dive
-		scr_sound_3d_pitched(sfx_dive, x, y, 1.3, 1.315)
+		if character == characters.peppino && sprite_index != spr_player_dive
+		{
+			vsp = 10
+			sprite_index = spr_player_dive
+			scr_sound_3d_pitched(sfx_dive, x, y, 1.3, 1.315)
+		}
+		else if character == characters.noise
+		{
+			movespeed = hsp
+			state = states.divebomb
+			vsp = 20
+			sprite_index = spr_playerN_divebombfall
+			exit;
+		}
 	}
 	else if grounded && sprite_index == spr_player_dive
 		reset_anim(spr_player_machroll)

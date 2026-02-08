@@ -308,6 +308,24 @@ function scr_hitwall(_x, _y)
 	return place_meeting(_x, _y, obj_solid) || behind_collision(_x, _y, obj_slope) || behind_collision(_x, _y, obj_sideplatform)
 }
 
+function scr_goupwall(_size = 32)
+{
+	if !scr_hitwall(x + sign(hsp), y - _size)
+	{
+		x += sign(hsp)
+		var _o = 0
+		while scr_solid(x, y)
+		{
+			y--
+			_o++
+		}
+		obj_camera.cam_y_offset = _o
+		return true;
+	}
+	else
+		return false;
+}
+
 function scr_can_enter_door(_state)
 {
 	return _state != states.taunt && 
